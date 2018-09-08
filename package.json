@@ -1,0 +1,23 @@
+{
+  "name": "apollo-graphql-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index",
+  "scripts": {
+    "start": "npm run build:live",
+    "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^10.9.4",
+    "nodemon": "^1.18.4",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.0.3"
+  },
+  "types": "lib/index",
+  "dependencies": {
+    "apollo-server": "^2.0.7",
+    "graphql": "^14.0.2"
+  }
+}
