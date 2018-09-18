@@ -1,22 +1,7 @@
 import {ApolloServer, gql } from 'apollo-server'
 
-const books = [
-    {
-      id: 0,
-      title: 'Harry Potter and the Chamber of Secrets',
-      authorIds: [0],
-    },
-    {
-        id: 1,
-        title: 'Harry Potter and the Goblet of Fire',
-        authorIds: [0]
-    },
-    {
-      id: 2,
-      title: 'Jurassic Park',
-      authorIds: [1],
-    },
-  ];
+import './api_books';
+import './gql_books';
 
 const authors = [
     {
@@ -59,11 +44,11 @@ const resolvers = {
         },
       books: () => {
           console.log('Fetching all books')
-          return books
+          //return books
       },
       book: (obj : any, args : any, context : any, info : any) => { 
           console.log(`Fetching book id ${args.id}`); 
-          return books.find(b => b.id == args.id);
+          //return books.find(b => b.id == args.id);
         }
     },
     Book: {
