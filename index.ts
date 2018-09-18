@@ -3,16 +3,9 @@ import {ApolloServer, gql } from 'apollo-server'
 import './api_books';
 import './gql_books';
 
-const authors = [
-    {
-        id: 0,
-        name: 'J.K. Rowling'
-    },
-    {
-        id: 1,
-        name: 'Michael Crichton'
-    }
-]
+import './api_authors';
+import './gql_authors';
+
 
 const typeDefs = gql`
   type Author {
@@ -37,10 +30,10 @@ const typeDefs = gql`
 
 const resolvers = {
     Query: {
-      authors: () => authors,
+      authors: () => {},//authors,
       author: (obj : any, args : any, context : any, info : any) => { 
           console.log(`Fetching author id ${args.id}`); 
-          return authors.find(a => a.id == args.id); 
+          //return authors.find(a => a.id == args.id); 
         },
       books: () => {
           console.log('Fetching all books')
@@ -54,7 +47,7 @@ const resolvers = {
     Book: {
         authors: (obj : any, args : any, ctx : any, info : any) => {
             console.log(`Fetching authors ${obj.authorIds}`)
-            return authors.filter(a => obj.authorIds.includes(a.id) );
+            //return authors.filter(a => obj.authorIds.includes(a.id) );
         }
     }
 };
