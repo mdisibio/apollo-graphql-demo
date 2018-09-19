@@ -1,4 +1,6 @@
-import {ApolloServer, gql } from 'apollo-server'
+import {ApolloServer, gql, introspectSchema, makeRemoteExecutableSchema, mergeSchemas } from 'apollo-server'
+import { HttpLink } from 'apollo-link-http';
+import fetch from 'cross-fetch';
 
 import './api_books';
 import './gql_books';
@@ -6,54 +8,28 @@ import './gql_books';
 import './api_authors';
 import './gql_authors';
 
+async function loadRemoteSchema(uri: string) {
+    const link = new HttpLink({ uri , fetch });
+    const schema = await introspectSchema(link);
+    const executableSchema = makeRemoteExecutableSchema({
+        schema,
+        link,
+    });
+    return executableSchema
+}
 
-const typeDefs = gql`
-  type Author {
-      id: ID!
-      name: String
-  }
+(async () => {
+    const bookSchema = await loadRemoteSchema('http://localhost:8082')
+    const authorSchema = await loadRemoteSchema('http://localhost:8084')
 
-  type Book {
-    id: ID!
-    title: String
-    authorIds: [Int]
-    authors: [Author]
-  }
+    const schema = mergeSchemas({
+        schemas: [
+            bookSchema,
+            authorSchema
+        ]
+    })
 
-  type Query {
-    authors: [Author]
-    author(id : Int) : Author
-    books: [Book]
-    book(id : Int) : Book
-  }
-`;
-
-const resolvers = {
-    Query: {
-      authors: () => {},//authors,
-      author: (obj : any, args : any, context : any, info : any) => { 
-          console.log(`Fetching author id ${args.id}`); 
-          //return authors.find(a => a.id == args.id); 
-        },
-      books: () => {
-          console.log('Fetching all books')
-          //return books
-      },
-      book: (obj : any, args : any, context : any, info : any) => { 
-          console.log(`Fetching book id ${args.id}`); 
-          //return books.find(b => b.id == args.id);
-        }
-    },
-    Book: {
-        authors: (obj : any, args : any, ctx : any, info : any) => {
-            console.log(`Fetching authors ${obj.authorIds}`)
-            //return authors.filter(a => obj.authorIds.includes(a.id) );
-        }
-    }
-};
-
-const server = new ApolloServer({ typeDefs, resolvers });
-
-server.listen().then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
-});
+    const server = new ApolloServer({ schema });
+    const { url } = await server.listen();
+    console.log(`🚀  Server ready at ${url}`);
+})();
