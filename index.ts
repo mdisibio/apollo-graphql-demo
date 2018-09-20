@@ -31,7 +31,7 @@ async function loadRemoteSchema(uri: string) {
     const resolvers = {
         Book: {
             firstAuthor: {
-                fragment: `... on Book { id }`,
+                fragment: `... on Book { authorIds }`,
                 resolve(book, args, context, info) {
                 return info.mergeInfo.delegateToSchema({
                     schema: authorSchema,
