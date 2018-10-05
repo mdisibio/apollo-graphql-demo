@@ -16,3 +16,5 @@ This project is modelled in a microservices style.  This is done to simulate how
 1. Two basic restful apis to query data about authors and books.  These represent the "legacy" services that already exist.
 1. Two graphQL services that wrap the restful apis.  These demonstrate how to build a simple graphQL api on top of restful apis.  These services are useful on their own.
 1. A final graphQL service that stitches the sub-schemas together while also adding new cross-schema resolvers.
+
+![Alt text](https://g.gravizo.com/svg?digraph%20G%20{;%20%20%20%20rankdir=LR;%20%20%20%20node[shape=box];%20%20%22Final%20GQL%22%20-%3E%20{%22Authors%20GQL%22,%20%22Books%20GQL%22}%20[label=delegate];%20%20%22Authors%20GQL%22%20-%3E%20%22Authors%20restful%20API%22;%20%20%22Books%20GQL%22%20-%3E%20%22Books%20restful%20API%22;%20%20})
