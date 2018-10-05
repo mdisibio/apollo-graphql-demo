@@ -12,6 +12,7 @@ The following GraphQL capabilities are demonstrated:
 - [ ] Subscriptions
 - [ ] Tracing
 - [ ] Authorization
+- [ ] Mutation
 
 This project is modelled in a microservices style.  This is done to simulate how a large GraphQL implementation could be achieved on top of existing microservices, and also how to stich the schemas together too much coupling.  
 
