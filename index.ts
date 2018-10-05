@@ -4,11 +4,11 @@ import fetch from 'cross-fetch';
 import { GraphQLSchema } from 'graphql';
 import { AddBooksAuthor } from './add-books-author';
 
-import './api_books';
-import './gql_books';
+import './api-books';
+import './gql-books';
 
-import './api_authors';
-import './gql_authors';
+import './api-authors';
+import './gql-authors';
 
 async function loadRemoteSchema(uri: string) : Promise<GraphQLSchema> {
     const link = new HttpLink({ uri , fetch });
