@@ -1,8 +1,17 @@
-import { Router, Request, Response } from 'express';
+//------------------------------------------------------
+// Books rest-ful API
+// This is a basic API that is an example of what an 
+// existing "legacy" API might look like. It is a full
+// express app listening on its own port.
+//------------------------------------------------------
+
+import { Request, Response } from 'express';
 import express = require('express')
 
 let app = express();
 
+// The data. In a real-world example this would
+// be stored in a database or other.
 const books = [
     {
       id: 0,

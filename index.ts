@@ -1,12 +1,21 @@
+//------------------------------------------------------
+// Authors rest-ful API
+// This is a basic API that is an example of what an 
+// existing "legacy" API might look like. It is a full
+// express app listening on its own port.
+//------------------------------------------------------
+
 import {ApolloServer, introspectSchema, makeRemoteExecutableSchema, mergeSchemas } from 'apollo-server'
 import { HttpLink } from 'apollo-link-http';
 import fetch from 'cross-fetch';
 import { GraphQLSchema } from 'graphql';
 import { AddBooksAuthor } from './add-books-author';
 
+// Start rest apis
 import './api-books';
 import './gql-books';
 
+// Start remote graphql
 import './api-authors';
 import './gql-authors';
 
@@ -32,10 +41,10 @@ async function loadRemoteSchema(uri: string) : Promise<GraphQLSchema> {
     // Will hold extra resolvers
     var resolvers = {};
 
-    // Load extra graphql fields and resolvers
+    // Extend graphql with new fields and resolvers
     AddBooksAuthor(authorSchema, schemas, resolvers);
 
-    // Merge all to create final
+    // Schema stitching - Merge all to create final schema
     const schema = mergeSchemas({
         schemas,
         resolvers
