@@ -7,17 +7,17 @@ const books = [
     {
       id: 0,
       title: 'Harry Potter and the Chamber of Secrets',
-      authorIds: [0],
+      authorId: 0,
     },
     {
         id: 1,
         title: 'Harry Potter and the Goblet of Fire',
-        authorIds: [0]
+        authorId: 0
     },
     {
       id: 2,
       title: 'Jurassic Park',
-      authorIds: [1],
+      authorId: 1,
     },
   ];
 

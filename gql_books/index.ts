@@ -5,7 +5,7 @@ const typeDefs = gql`
   type Book {
     id: ID!
     title: String
-    authorIds: [Int]
+    authorId: ID!
   }
 
   type Query {
