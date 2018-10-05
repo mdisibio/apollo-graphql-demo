@@ -1,14 +1,14 @@
-import {ApolloServer, gql, introspectSchema, makeRemoteExecutableSchema, mergeSchemas } from 'apollo-server'
+import {ApolloServer, introspectSchema, makeRemoteExecutableSchema, mergeSchemas } from 'apollo-server'
 import { HttpLink } from 'apollo-link-http';
 import fetch from 'cross-fetch';
-import dataloader from 'dataloader';
+import { GraphQLSchema } from 'graphql';
+import { AddBooksAuthor } from './add-books-author';
 
 import './api_books';
 import './gql_books';
 
 import './api_authors';
 import './gql_authors';
-import { GraphQLSchema } from 'graphql';
 
 async function loadRemoteSchema(uri: string) : Promise<GraphQLSchema> {
     const link = new HttpLink({ uri , fetch });
@@ -21,48 +21,23 @@ async function loadRemoteSchema(uri: string) : Promise<GraphQLSchema> {
 }
 
 (async () => {
+    // Load remote schemas
     const bookSchema = await loadRemoteSchema('http://localhost:8082')
     const authorSchema = await loadRemoteSchema('http://localhost:8084')
+    var schemas = [
+        bookSchema,
+        authorSchema
+    ];
+    
+    // Will hold extra resolvers
+    var resolvers = {};
 
-    const linkedTypes = `
-        extend type Book {
-            author: Author
-        }
-    `;
+    // Load extra graphql fields and resolvers
+    AddBooksAuthor(authorSchema, schemas, resolvers);
 
-    const resolvers = {
-        Book: {
-            author: {
-                fragment: `... on Book { authorId }`,
-                resolve(book, args, context, info) {
-                    if(!context.authorLoader) {
-                        context.authorLoader = new dataloader(ids => {
-                            const promises = ids.map(id => info.mergeInfo.delegateToSchema({
-                                schema: authorSchema,
-                                operation: 'query',
-                                fieldName: 'author',
-                                args: {
-                                    id
-                                },
-                                context,
-                                info,
-                                }));
-                            return Promise.all(promises);
-                        });
-                    }
-                    return context.authorLoader.load(parseInt(book.authorId));
-                },
-            },
-        }
-    };
-
-
+    // Merge all to create final
     const schema = mergeSchemas({
-        schemas: [
-            bookSchema,
-            authorSchema,
-            linkedTypes
-        ],
+        schemas,
         resolvers
     })
 
