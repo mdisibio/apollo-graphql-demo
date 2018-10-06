@@ -10,7 +10,7 @@ The following GraphQL capabilities are demonstrated:
 - [x] Batching with DataLoader
 - [ ] Transforms
 - [ ] Subscriptions
-- [ ] Tracing
+- [x] Tracing
 - [ ] Authorization
 - [ ] Mutation
 
