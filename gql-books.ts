@@ -21,6 +21,10 @@ const typeDefs = gql`
     books: [Book]
     book(id : Int) : Book
   }
+
+  type Mutation {
+    addBook(title: String, authorId: ID!) : Book
+  }
 `;
 
 const api = "http://localhost:8081";
@@ -38,6 +42,18 @@ const resolvers = {
           return b.json();
         }
     },
+    Mutation: {
+        addBook: async (obj, args, context, info) => {
+          var data = {title: args.title, authorId: args.authorId}
+          console.log(`gql adding book: ${data}`)
+          var b = await fetch(`${api}/`, { 
+            method: 'POST', 
+            body: JSON.stringify(data),
+            headers: { 'Content-Type': 'application/json' }
+          })
+          return b.json();
+        }
+    }
 };
 
 const server = new ApolloServer({ 

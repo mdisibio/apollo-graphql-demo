@@ -7,8 +7,10 @@
 
 import { Request, Response } from 'express';
 import express = require('express')
+import bodyParser = require('body-parser')
 
 let app = express();
+app.use(bodyParser.json());
 
 // The data. In a real-world example this would
 // be stored in a database or other.
@@ -39,6 +41,14 @@ app.get('/:id', (req: Request, res: Response) => {
     let { id } = req.params;
     console.log(`rest fetching book id ${id}`)
     res.send(books.find(b => b.id == id))
+});
+
+app.post('/', (req: Request, res: Response) => {
+    var book = req.body;
+    book.id = books[books.length-1].id + 1
+    console.log(`rest adding new book: ${book}`)
+    books.push(book);
+    res.send(book)
 });
 
 app.listen(8081, () => {
