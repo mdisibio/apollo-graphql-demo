@@ -6,8 +6,8 @@
 //------------------------------------------------------
 
 import {ApolloServer, introspectSchema, makeRemoteExecutableSchema, mergeSchemas } from 'apollo-server'
-import { HttpLink } from 'apollo-link-http';
-import fetch from 'cross-fetch';
+import { WebSocketLink } from "apollo-link-ws";
+import WebSocket from 'ws';
 import { GraphQLSchema } from 'graphql';
 import { AddBooksAuthor } from './add-books-author';
 
@@ -20,7 +20,7 @@ import './api-authors';
 import './gql-authors';
 
 async function loadRemoteSchema(uri: string) : Promise<GraphQLSchema> {
-    const link = new HttpLink({ uri , fetch });
+    const link = new WebSocketLink({uri, webSocketImpl: WebSocket})
     const schema = await introspectSchema(link);
     const executableSchema = makeRemoteExecutableSchema({
         schema,
@@ -31,8 +31,8 @@ async function loadRemoteSchema(uri: string) : Promise<GraphQLSchema> {
 
 (async () => {
     // Load remote schemas
-    const bookSchema = await loadRemoteSchema('http://localhost:8082')
-    const authorSchema = await loadRemoteSchema('http://localhost:8084')
+    const bookSchema = await loadRemoteSchema('ws://localhost:8082/graphql')
+    const authorSchema = await loadRemoteSchema('ws://localhost:8084/graphql')
     var schemas = [
         bookSchema,
         authorSchema

@@ -10,7 +10,6 @@ import express = require('express')
 import bodyParser = require('body-parser')
 
 let app = express();
-app.use(bodyParser.json());
 
 // The data. In a real-world example this would
 // be stored in a database or other.
@@ -19,16 +18,19 @@ const books = [
       id: 0,
       title: 'Harry Potter and the Chamber of Secrets',
       authorId: 0,
+      sold: 0
     },
     {
         id: 1,
         title: 'Harry Potter and the Goblet of Fire',
-        authorId: 0
+        authorId: 0,
+        sold: 0
     },
     {
       id: 2,
       title: 'Jurassic Park',
       authorId: 1,
+      sold: 0
     },
   ];
 
@@ -43,12 +45,13 @@ app.get('/:id', (req: Request, res: Response) => {
     res.send(books.find(b => b.id == id))
 });
 
-app.post('/', (req: Request, res: Response) => {
-    var book = req.body;
-    book.id = books[books.length-1].id + 1
-    console.log(`rest adding new book: ${book}`)
-    books.push(book);
-    res.send(book)
+app.post('/:id/sales', (req: Request, res: Response) => {
+    var book = books.find(b => b.id == req.params.id);
+    if(book) {
+        book.sold = book.sold + 1;
+        console.log(`rest selling book ${book.id}. Sold: ${book.sold}`)
+    }
+    res.send(book);
 });
 
 app.listen(8081, () => {

@@ -8,13 +8,17 @@
 //------------------------------------------------------
 
 import {ApolloServer, gql } from 'apollo-server'
+import { PubSub } from 'graphql-subscriptions'
 import fetch from 'node-fetch';
+
+const pubsub = new PubSub();
 
 const typeDefs = gql`
   type Book {
     id: ID!
     title: String
     authorId: ID!
+    sold: Int
   }
 
   type Query {
@@ -23,7 +27,11 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addBook(title: String, authorId: ID!) : Book
+    sellBook(id: ID!) : Book
+  }
+
+  type Subscription {
+    bookSold: Book
   }
 `;
 
@@ -43,16 +51,27 @@ const resolvers = {
         }
     },
     Mutation: {
-        addBook: async (obj, args, context, info) => {
-          var data = {title: args.title, authorId: args.authorId}
-          console.log(`gql adding book: ${data}`)
-          var b = await fetch(`${api}/`, { 
-            method: 'POST', 
-            body: JSON.stringify(data),
-            headers: { 'Content-Type': 'application/json' }
-          })
-          return b.json();
+        sellBook: async (obj, args, context, info) => {
+          console.log(`gql selling book: ${args.id}`)
+          
+          var b = await (await fetch(`${api}/${args.id}/sales`, {
+            method: 'POST'
+          })).json()
+          
+          pubsub.publish('bookSold', {
+            bookSold: b
+          });
+          
+          return b;
         }
+    }, 
+    Subscription: {
+      bookSold: {
+        subscribe: () => {
+          console.log('New subscription to gql bookSold')
+          return pubsub.asyncIterator('bookSold')
+        }
+      }
     }
 };
 
