@@ -39,7 +39,12 @@ const resolvers = {
   }
 };
 
-const server = new ApolloServer({ typeDefs, resolvers, tracing: true });
+const server = new ApolloServer({ 
+  typeDefs, 
+  resolvers, 
+  tracing: true, 
+  introspection: true, 
+  playground: true });
 
 server.listen({port: 8084}).then(({ url }) => {
   console.log(`🚀  Authors gql ready at ${url}`);

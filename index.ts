@@ -50,7 +50,11 @@ async function loadRemoteSchema(uri: string) : Promise<GraphQLSchema> {
         resolvers
     })
 
-    const server = new ApolloServer({ schema, tracing: true });
+    const server = new ApolloServer({ 
+        schema, 
+        tracing: true, 
+        introspection: true, 
+        playground: true });
     const { url } = await server.listen();
     console.log(`🚀  Server ready at ${url}`);
 })();
