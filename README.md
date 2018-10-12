@@ -16,18 +16,30 @@ The following GraphQL capabilities are demonstrated:
 - [ ] Sorting
 - [ ] Limiting
 
-This project is modelled in a microservices style.  This is done to simulate how a large GraphQL implementation could be achieved on top of existing microservices, and also how to stich the schemas together too much coupling.  
+This project is modelled in a microservices style.  This is done to simulate how a GraphQL implementation could be achieved on top of existing microservices, introducing the benefits of GraphQL without also introducing coupling or requiring coordination between services and teams.
 
-1. Two basic restful apis to query data about authors and books.  These represent the "legacy" services that already exist.
-1. Two graphQL services that wrap the restful apis.  These demonstrate how to build a simple graphQL api on top of restful apis.  These services are useful on their own.
-1. A final graphQL service that stitches the sub-schemas together while also adding new cross-schema resolvers.
+The goals are:
+- Independent deployment and technology of backing services
+- Per-domain schemas in backing services that could be managed by separate teams
+- Schema not duplicated in the front-end GraphQL server
+- All types and operations are defined in exactly one place
 
-![Alt text](https://g.gravizo.com/svg?digraph%20G%20{;%20%20%20%20rankdir=LR;%20%20%20%20node[shape=box];%20%20%22Final%20GQL%22%20-%3E%20{%22Authors%20GQL%22,%20%22Books%20GQL%22}%20[label=delegate];%20%20%22Authors%20GQL%22%20-%3E%20%22Authors%20restful%20API%22;%20%20%22Books%20GQL%22%20-%3E%20%22Books%20restful%20API%22;%20%20})
+# Project structure
 
+There are 2 rest-ful backing services, which are wrapped by domain-specific GraphQL services.  A front-end GraphQL service exposes the all functionality of the domain-specific schemas, while also adding cross-schema operations through stitching and delegation. 
+
+    └── Front-end GQL         # Cross-schema operations
+
+        └── Authors GQL       # Author GraphQL operations
+            └── Authors API   # Rest-ful backing service for Authors data
+
+        └── Books GQL         # Books GraphQL operations
+            └── Books API     # Rest-ful backing service for Authors data
 
 # Example
 
-Query:
+This front-end query will read all books, and perform an inner lookup to read the author information from the other backing service.
+
 ```
 query {
   books {
@@ -35,10 +47,6 @@ query {
     author {
       name
     }
-  }
-  
-  authors {
-    name
   }
 }
 ```
@@ -64,14 +72,6 @@ Returns:
         "author": {
           "name": "Michael Crichton"
         }
-      }
-    ],
-    "authors": [
-      {
-        "name": "J.K. Rowling"
-      },
-      {
-        "name": "Michael Crichton"
       }
     ]
   }
