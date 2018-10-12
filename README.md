@@ -1,6 +1,6 @@
 # apollo-graphql-demo
 
-This demo project was created an an exercise to become personally familiar with GraphQL but also to explore how it could be added on top of an existing solution.  This is a common problem for any modern software developer, who might have various restful APIs at hand, and would like to extend them with GraphQL and add new cross-api abilities.  
+This demo project was created an an exercise to become personally familiar with GraphQL but also to explore how it could be added on top of an existing fleet of enterprise services.  This is a common problem for a software developer who might have various restful APIs at hand, and would like to extend them with GraphQL and add new cross-api abilities.  
 
 The following GraphQL capabilities are demonstrated:
 - [x] Rest-based data fetching
@@ -16,11 +16,11 @@ The following GraphQL capabilities are demonstrated:
 - [ ] Sorting
 - [ ] Limiting
 
-This project is modelled in a microservices style.  This is done to simulate how a GraphQL implementation could be achieved on top of existing microservices, introducing the benefits of GraphQL without also introducing coupling or requiring coordination between services and teams.
+This project is modelled in a microservices style, to match common scenarios in API design.  It also tests how a GraphQL implementation could "scale" across teams and domains to introduce the benefits of GraphQL, while avoiding coupling and coordination.
 
 The goals are:
 - Independent deployment and technology of backing services
-- Per-domain schemas in backing services that could be managed by separate teams
+- Independent definition of per-domain schemas
 - Schema not duplicated in the front-end GraphQL server
 - All types and operations are defined in exactly one place
 
