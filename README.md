@@ -34,7 +34,7 @@ There are 2 rest-ful backing services, which are wrapped by domain-specific Grap
             └── Authors API   # Rest-ful backing service for Authors data
 
         └── Books GQL         # Books GraphQL operations
-            └── Books API     # Rest-ful backing service for Authors data
+            └── Books API     # Rest-ful backing service for Books data
 
 # Example
 
