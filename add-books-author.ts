@@ -39,24 +39,17 @@ export function AddBooksAuthor(authorSchema : GraphQLSchema, schemas : any[], re
                 if(!context.authorLoader) {
                     context.authorLoader = new dataloader(ids => {
                         // This is delegating a method in the author
-                        // schema to lookup an author by ID: author(id)
-                        
-                        // However, Dataloader presents the final list of
-                        // ids to load in a single array, and expects a
-                        // single promise.  Therefore map each ID to a
-                        // separate request and promise, and wait for
-                        // all to complete.
-                        const promises = ids.map(id => info.mergeInfo.delegateToSchema({
+                        // schema to lookup authors by ID: authorsByID(ids)
+                        return info.mergeInfo.delegateToSchema({
                             schema: authorSchema,
                             operation: 'query',
-                            fieldName: 'author',
+                            fieldName: 'authorsByID',
                             args: {
-                                id
+                                ids
                             },
                             context,
                             info,
-                            }));
-                        return Promise.all(promises);
+                            });
                     });
                 }
                 return context.authorLoader.load(parseInt(book.authorId));

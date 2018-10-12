@@ -18,6 +18,7 @@ const typeDefs = gql`
 
   type Query {
     authors: [Author]
+    authorsByID(ids : [Int]) : [Author]
     author(id : Int) : Author
   }
 `;
@@ -31,6 +32,13 @@ const resolvers = {
       var books = await fetch(`${api}/`);
       return books.json();
     },
+
+    authorsByID: async (obj, args, context, info) => {
+      console.log(`gql fetching author ids ${args.ids}`); 
+      var a = await fetch(`${api}/batch/${args.ids.join(',')}`);
+      return a.json();
+    },
+
     author: async (obj, args, context, info) => { 
       console.log(`gql fetching author id ${args.id}`); 
       var b = await fetch(`${api}/${args.id}`);

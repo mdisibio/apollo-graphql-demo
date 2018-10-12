@@ -31,8 +31,13 @@ app.get('/', (req: Request, res: Response) => {
 app.get('/:id', (req: Request, res: Response) => {
     let { id } = req.params;
     console.log(`rest fetching author id ${id}`)
-    res.send(authors.find(b => b.id == id))
+    res.send(authors.find(a => a.id == id))
 });
+
+app.get('/batch/:ids', (req: Request, res: Response) => {
+    let ids : Number[] = req.params.ids.split(',')
+    res.send(ids.map(id => authors.find(a => a.id == id)));
+})
 
 app.listen(8083, () => {
     console.log("🚀  Authors api ready at http://localhost:8083/")
