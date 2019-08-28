@@ -15,6 +15,8 @@ The following GraphQL capabilities are demonstrated:
 - [x] Mutation
 - [ ] Sorting
 - [ ] Limiting
+- [ ] Pagination
+- [ ] Fragments
 
 This project is modelled in a microservices style, to match common scenarios in API design.  It also tests how a GraphQL implementation could "scale" across teams and domains to introduce the benefits of GraphQL, while avoiding coupling and coordination.
 
