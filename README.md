@@ -83,15 +83,10 @@ Returns:
 # Running
 
 * `git clone` the repository
-* `npm start`
+* `docker-compose build`
+* `docker-compose up`
 * You should see startup text: 
 ```
-🚀  Books api ready at http://localhost:8081
-🚀  Authors api ready at http://localhost:8083/
-🚀  Books gql ready at http://localhost:8082/
-🚀  Authors gql ready at http://localhost:8084/
-🚀  Server ready at http://localhost:4000/
+🚀  Graphsql server ready at http://localhost:4000/
 ```
 * Browse to http://localhost:4000/
-
-Each micro-service can also be accessed individually, and the graphql servers all include the graphql playground.
