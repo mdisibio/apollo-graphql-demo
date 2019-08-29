@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  front:
+    build:
+      context: ./front-gql
+      dockerfile: ../Dockerfile
+    ports:
+      - "4000:4000"
+    depends_on:
+      - authors-gql
+      - books-gql
+
+  authors-api:
+    build:
+      context: ./authors-api
+      dockerfile: ../Dockerfile
+
+  authors-gql:
+    build:
+      context: ./authors-gql
+      dockerfile: ../Dockerfile
+    depends_on:
+      - authors-api
+
+  books-api:
+    build:
+      context: ./books-api
+      dockerfile: ../Dockerfile
+
+  books-gql:
+    build:
+      context: ./books-gql
+      dockerfile: ../Dockerfile
+    depends_on:
+      - books-api

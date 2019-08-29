@@ -1,8 +1,7 @@
 //------------------------------------------------------
 // Authors rest-ful API
 // This is a basic API that is an example of what an 
-// existing "legacy" API might look like. It is a full
-// express app listening on its own port.
+// existing "legacy" API might look like.
 //------------------------------------------------------
 
 import { Request, Response } from 'express';
@@ -24,13 +23,11 @@ const authors = [
 ]
 
 app.get('/', (req: Request, res: Response) => {
-    console.log("rest fetching all authors")
     res.send(authors);
 });
 
 app.get('/:id', (req: Request, res: Response) => {
     let { id } = req.params;
-    console.log(`rest fetching author id ${id}`)
     res.send(authors.find(a => a.id == id))
 });
 
@@ -39,8 +36,4 @@ app.get('/batch/:ids', (req: Request, res: Response) => {
     res.send(ids.map(id => authors.find(a => a.id == id)));
 })
 
-app.listen(8083, () => {
-    console.log("🚀  Authors api ready at http://localhost:8083/")
-});
-
-export default app;
+app.listen(8080);

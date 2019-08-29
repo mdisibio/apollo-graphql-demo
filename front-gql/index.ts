@@ -1,8 +1,8 @@
 //------------------------------------------------------
-// Authors rest-ful API
-// This is a basic API that is an example of what an 
-// existing "legacy" API might look like. It is a full
-// express app listening on its own port.
+// Front-end GraphSQL Server
+// This service runs on top of the individual GraphSQL
+// services.  It proxies access to them, and also adds
+// cross-schema operations.
 //------------------------------------------------------
 
 import {ApolloServer, introspectSchema, makeRemoteExecutableSchema, mergeSchemas } from 'apollo-server'
@@ -10,14 +10,6 @@ import { WebSocketLink } from "apollo-link-ws";
 import WebSocket from 'ws';
 import { GraphQLSchema } from 'graphql';
 import { AddBooksAuthor } from './add-books-author';
-
-// Start rest apis
-import './api-books';
-import './gql-books';
-
-// Start remote graphql
-import './api-authors';
-import './gql-authors';
 
 async function loadRemoteSchema(uri: string) : Promise<GraphQLSchema> {
     const link = new WebSocketLink({uri, webSocketImpl: WebSocket})
@@ -31,8 +23,8 @@ async function loadRemoteSchema(uri: string) : Promise<GraphQLSchema> {
 
 (async () => {
     // Load remote schemas
-    const bookSchema = await loadRemoteSchema('ws://localhost:8082/graphql')
-    const authorSchema = await loadRemoteSchema('ws://localhost:8084/graphql')
+    const bookSchema = await loadRemoteSchema('ws://books-gql:8080/graphql')
+    const authorSchema = await loadRemoteSchema('ws://authors-gql:8080/graphql')
     var schemas = [
         bookSchema,
         authorSchema
@@ -56,5 +48,5 @@ async function loadRemoteSchema(uri: string) : Promise<GraphQLSchema> {
         introspection: true, 
         playground: true });
     const { url } = await server.listen();
-    console.log(`🚀  Server ready at ${url}`);
+    console.log(`🚀 Graphql server ready at ${url}`);
 })();
