@@ -1,10 +1,7 @@
 //------------------------------------------------------
 // Books GraphQL API
 // This is a basic graphQL API that is an example of how
-// implement graphQL on top of an existing rest-ful API.
-// It is a full app listening on its own port.
-//
-// This uses node fetch package to construct rest requests.
+// to implement graphQL on top of an existing restful API.
 //------------------------------------------------------
 
 import {ApolloServer, gql } from 'apollo-server'
@@ -23,26 +20,23 @@ const typeDefs = gql`
   }
 `;
 
-const api = "http://localhost:8083";
+const api = "http://authors-api:8080";
 
 const resolvers = {
   Query: {
     authors: async () => {
-      console.log('gql fetching all authors')
-      var books = await fetch(`${api}/`);
-      return books.json();
+      var r = await fetch(`${api}/`);
+      return r.json();
     },
 
     authorsByID: async (obj, args, context, info) => {
-      console.log(`gql fetching author ids ${args.ids}`); 
-      var a = await fetch(`${api}/batch/${args.ids.join(',')}`);
-      return a.json();
+      var r = await fetch(`${api}/batch/${args.ids.join(',')}`);
+      return r.json();
     },
 
     author: async (obj, args, context, info) => { 
-      console.log(`gql fetching author id ${args.id}`); 
-      var b = await fetch(`${api}/${args.id}`);
-      return b.json();
+      var r = await fetch(`${api}/${args.id}`);
+      return r.json();
     }
   }
 };
@@ -54,8 +48,4 @@ const server = new ApolloServer({
   introspection: true, 
   playground: true });
 
-server.listen({port: 8084}).then(({ url }) => {
-  console.log(`🚀  Authors gql ready at ${url}`);
-});
-
-export default server;
+server.listen({port: 8080});
